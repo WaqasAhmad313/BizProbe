@@ -2,14 +2,23 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import logo from "../assets/bizprobe-logo.png";
-import AuthForm from "../components/AuthForm"; // Import AuthForm
+import AuthForm from "../components/AuthForm";
+import signupImage from "../assets/business_finder.jpg";
+import searchImage from "../assets/business_search.jpg";
+import outreachImage from "../assets/Outreach.jpg";
+import {
+  FaFacebookF,
+  FaTwitter,
+  FaLinkedinIn,
+  FaYoutube,
+} from "react-icons/fa";
 
 const Home = () => {
   const { token } = useContext(AuthContext);
   const navigate = useNavigate();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  // Handle navigation
+  // Handle navigation with authentication check
   const handleNavigation = (route) => {
     if (token) {
       navigate(route);
@@ -18,69 +27,198 @@ const Home = () => {
     }
   };
 
+  // Handle section scrolling
+  const handleScroll = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#1F4959] flex flex-col items-center justify-center p-6 relative">
-      {/* Logo */}
-      <img
-        src={logo}
-        alt="BizProbe Logo"
-        className="absolute top-6 left-6 w-48"
-      />
-
-      {/* Top Right - Login / Dashboard Button */}
-      <div className="absolute top-6 right-6">
-        {token ? (
+    <div className="min-h-screen bg-gray-100 text-gray-900">
+      <header className="fixed top-0 right-0 w-full bg-black bg-opacity-50 backdrop-blur-md shadow-md p-4 flex justify-end items-center z-10 space-x-6">
+        <img src={logo} alt="BizProbe Logo" className="w-36 mr-auto" />
+        <nav className="flex space-x-6 text-white">
           <button
-            onClick={() => navigate("/Dashboard")}
-            className="px-6 py-2 bg-white text-black rounded-md shadow-lg hover:bg-gray-700 hover:text-white border border-white transition"
+            onClick={() => handleScroll("search")}
+            className="hover:text-blue-600"
           >
-            Dashboard
+            Search Business
           </button>
-        ) : (
           <button
-            onClick={() => setIsAuthModalOpen(true)}
-            className="px-6 py-2 bg-white text-black rounded-md shadow-lg hover:bg-black hover:text-white border border-white transition"
+            onClick={() => handleScroll("outreach")}
+            className="hover:text-blue-600"
           >
-            Login / Sign Up
+            Outreach
           </button>
-        )}
-      </div>
+        </nav>
+        <div>
+          {token ? (
+            <button
+              onClick={() => navigate("/dashboard")}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700"
+            >
+              Dashboard
+            </button>
+          ) : (
+            <button
+              onClick={() => setIsAuthModalOpen(true)}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700"
+            >
+              Login / Sign Up
+            </button>
+          )}
+        </div>
+      </header>
 
-      {/* Hero Section */}
-      <div className="text-center text-white mt-10">
-        <h1 className="text-3xl font-bold">BIZPROBE</h1>
-        <p className="text-lg mt-2">Empowering Businesses, Amplifying Reach</p>
-      </div>
+      {/* Sign Up Section */}
+      <section
+        id="signup"
+        className="flex flex-col md:flex-row items-center justify-between px-10 py-24 mt-16"
+      >
+        <div className="md:w-1/2">
+          <h2 className="text-4xl font-bold">Join BizProbe Today</h2>
+          <p className="mt-4 text-lg">
+            Take your business to the next level with our advanced tools and
+            insights. Gain access to exclusive data, find potential leads, and
+            enhance your outreach efforts with ease.
+          </p>
+          <button
+            onClick={() => handleNavigation("/dashboard")}
+            className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700"
+          >
+            Get Started
+          </button>
+        </div>
+        <div className="md:w-1/2 flex justify-center">
+          <img
+            src={signupImage}
+            alt="Sign Up"
+            className="w-80 rounded-lg shadow-md"
+          />
+        </div>
+      </section>
 
-      {/* Navigation Cards */}
-      <div className="mt-10 flex flex-col md:flex-row gap-6">
-        {/* Keyword Volume */}
-        <div
-          onClick={() => handleNavigation("/keyword-volume")}
-          className="group cursor-pointer"
-        >
-          <div className="w-72 h-32 bg-[#011425] text-white flex flex-col items-center justify-center rounded-lg border border-gray-400 transition-all group-hover:scale-105">
-            <h2 className="text-lg font-bold">KEYWORD VOLUME</h2>
-            <p className="text-center text-sm mt-2">
-              Capitalize on hidden opportunities to dominate your market
+      {/* Search Business Section */}
+      <section
+        id="search"
+        className="flex flex-col md:flex-row items-center justify-between px-10 py-24 bg-gray-200"
+      >
+        <div className="md:w-1/2 flex justify-center">
+          <img
+            src={searchImage}
+            alt="Search Business"
+            className="w-80 rounded-lg shadow-md"
+          />
+        </div>
+        <div className="md:w-1/2">
+          <h2 className="text-4xl font-bold">Find the Right Businesses</h2>
+          <p className="mt-4 text-lg">
+            Easily discover businesses in your area or industry. Our intelligent
+            search feature helps you connect with relevant businesses and
+            explore new opportunities effortlessly.
+          </p>
+          <button
+            onClick={() => handleNavigation("/search-businesses")}
+            className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700"
+          >
+            Find Businesses
+          </button>
+        </div>
+      </section>
+
+      {/* Outreach Section */}
+      <section
+        id="outreach"
+        className="flex flex-col md:flex-row items-center justify-between px-10 py-24"
+      >
+        <div className="md:w-1/2">
+          <h2 className="text-4xl font-bold">Expand Your Reach</h2>
+          <p className="mt-4 text-lg">
+            Connect with potential clients and partners through our powerful
+            outreach tools. Automate your outreach, track responses, and enhance
+            your business networking.
+          </p>
+          <button
+            onClick={() => handleNavigation("/outreach")}
+            className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700"
+          >
+            Start Outreach
+          </button>
+        </div>
+        <div className="md:w-1/2 flex justify-center">
+          <img
+            src={outreachImage}
+            alt="Outreach"
+            className="w-80 rounded-lg shadow-md"
+          />
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-black text-white py-10 px-10 mt-10">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <img src={logo} alt="BizProbe Logo" className="w-36 mb-4" />
+            <p className="text-sm">
+              Take your business to the next level with our advanced tools and
+              insights. Gain access to exclusive data, find potential leads, and
+              enhance your outreach efforts with ease.
             </p>
           </div>
-        </div>
 
-        {/* Search Businesses */}
-        <div
-          onClick={() => handleNavigation("/search-businesses")}
-          className="group cursor-pointer"
-        >
-          <div className="w-72 h-32 bg-[#011425] text-white flex flex-col items-center justify-center rounded-lg border border-gray-400 transition-all group-hover:scale-105">
-            <h2 className="text-lg font-bold">SEARCH BUSINESSES</h2>
-            <p className="text-center text-sm mt-2">
-              Connect with local businesses to find the services and products
-              you need
-            </p>
+          {/* Page Links */}
+          <div>
+            <h3 className="text-lg font-bold mb-4">Pages</h3>
+            <ul className="space-y-2">
+              <li>
+                <button
+                  onClick={() => handleNavigation("signup")}
+                  className="hover:text-blue-600"
+                >
+                  Sign Up
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleNavigation("search")}
+                  className="hover:text-blue-600"
+                >
+                  Search Businesses
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleNavigation("outreach")}
+                  className="hover:text-blue-600"
+                >
+                  Outreach
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social Media Links */}
+          <div>
+            <h3 className="text-lg font-bold mb-4">Follow Us</h3>
+            <div className="flex space-x-4">
+              <a href="#" className="hover:text-blue-500">
+                <FaFacebookF size={20} />
+              </a>
+              <a href="#" className="hover:text-blue-400">
+                <FaTwitter size={20} />
+              </a>
+              <a href="#" className="hover:text-blue-400">
+                <FaYoutube size={20} />
+              </a>
+              <a href="#" className="hover:text-blue-600">
+                <FaLinkedinIn size={20} />
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      </footer>
 
       {/* Auth Modal */}
       {isAuthModalOpen && (

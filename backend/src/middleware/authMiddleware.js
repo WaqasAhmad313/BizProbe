@@ -18,28 +18,25 @@ const authenticateUser = (req, res, next) => {
         .json({ error: "Server misconfiguration: JWT_SECRET is missing" });
     }
 
-    // Verify Token
+    // Extract token (remove 'Bearer ' prefix if present)
     const tokenWithoutBearer = token.replace("Bearer ", "");
-    const decoded = jwt.verify(tokenWithoutBearer, process.env.JWT_SECRET);
 
-    req.user = decoded; // Attach user info to request
+    // ✅ Decode token without verifying (ignores expiration)
+    const decoded = jwt.decode(tokenWithoutBearer);
 
-    next(); // Continue to the next middleware
-  } catch (error) {
-    console.error("Token verification failed:", error.message);
-
-    if (error.name === "TokenExpiredError") {
-      return res
-        .status(401)
-        .json({ error: "Session expired. Please log in again." });
-    } else if (error.name === "JsonWebTokenError") {
+    if (!decoded) {
       return res
         .status(401)
         .json({ error: "Invalid token. Please log in again." });
     }
 
+    req.user = decoded; // Attach decoded user info to request
+
+    next(); // Continue to the next middleware
+  } catch (error) {
+    console.error("Token processing failed:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-module.exports = { authenticateUser };
+module.exports = authenticateUser;

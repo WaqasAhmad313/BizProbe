@@ -9,7 +9,7 @@ const AuthPage = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
 
   useEffect(() => {
-    if (token) navigate("/Businesssearch"); // Redirect if already logged in
+    if (token) navigate("/Businesssearch");
   }, [token, navigate]);
 
   return (

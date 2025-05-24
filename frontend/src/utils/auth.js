@@ -9,7 +9,7 @@ export const ProtectedRoute = ({ element }) => {
 
   useEffect(() => {
     if (!token) {
-      navigate("/"); // Redirect if no token is found
+      navigate("/");
     }
   }, [token, navigate]);
 
